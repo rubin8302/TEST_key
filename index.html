@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf8f4">
+  <meta name="description" content="9개의 질문으로 가볍게 알아보는 키오리 투자캐릭터 TEST">
+  <title>키오리 투자캐릭터 TEST</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+  <style>
+    :root{
+      --bg:#fbf8f4;--card:#fffdfb;--ink:#2c282c;--muted:#746f75;--line:#eadfd9;
+      --rose:#d8798a;--rose-soft:#f8e8eb;--lav:#9178bd;--lav-soft:#f0ecf8;
+      --sage:#7f986e;--sage-soft:#eef3ea;--gold:#aa9761;--shadow:0 8px 22px rgba(80,60,70,.065)
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg);-webkit-text-size-adjust:100%}
+    body{margin:0;min-width:280px;min-height:100vh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;word-break:keep-all}
+    button{border:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    button:focus-visible{outline:3px solid rgba(145,120,189,.35);outline-offset:3px}
+    .wrap{width:min(100%,560px);min-height:100vh;margin:0 auto;padding:16px 12px calc(24px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center}
+    .screen{width:100%}.hidden{display:none!important}
+    .panel{width:100%;padding:26px 21px;background:var(--card);border:1px solid #eee5df;border-radius:26px;box-shadow:var(--shadow)}
+    .brand{margin-bottom:13px;color:#81718e;font-size:13px;font-weight:900;letter-spacing:.04em}
+    h1{margin:0 0 11px;font-size:clamp(27px,7vw,31px);line-height:1.2;letter-spacing:-.04em}
+    .subtitle{margin-bottom:7px;font-size:18px;font-weight:850;letter-spacing:-.02em}
+    .desc{margin:0 0 24px;color:var(--muted);font-size:15px;line-height:1.65}
+    .primary{width:100%;min-height:56px;padding:16px;border-radius:17px;background:linear-gradient(135deg,#856eaf,#a48ac8);box-shadow:0 5px 12px rgba(145,120,189,.16);color:#fff;font-size:16px;font-weight:900}
+    .primary:active{transform:translateY(1px)}
+    .notice{margin-top:17px;padding:13px 14px;border:1px solid #f0e4df;border-radius:15px;background:#fff9f6;color:#776f74;font-size:12px;line-height:1.65}
+    .credit{margin-top:15px;text-align:center;color:#9c9498;font-size:11px;letter-spacing:.04em}
+
+    .progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .progress-label{color:var(--rose);font-size:13px;font-weight:900}
+    .quiz-brand{margin:0;color:#81718e;font-size:12px;font-weight:850}
+    .progress-track{height:8px;margin-bottom:25px;overflow:hidden;border-radius:999px;background:#eee8e5}
+    .progress-bar{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--rose),var(--lav));transition:width .2s ease}
+    .question{min-height:94px;margin-bottom:20px;font-size:21px;line-height:1.5;font-weight:900;letter-spacing:-.025em;white-space:pre-line}
+    .choices{display:grid;gap:12px}
+    .choice{display:flex;align-items:flex-start;width:100%;min-height:70px;padding:17px 16px;text-align:left;border:1px solid #eee3de;border-radius:17px;background:#fffaf8;color:var(--ink);font-size:15px;line-height:1.55;font-weight:750}
+    .choice:nth-child(2){border-color:#e9e2f2;background:#fbf9ff}
+    .choice:active{transform:scale(.995)}.choice[disabled]{cursor:default;opacity:.7}
+    .tag{display:inline-flex;flex:0 0 26px;align-items:center;justify-content:center;width:26px;height:26px;margin:0 9px 0 0;border-radius:50%;background:var(--rose);color:#fff;font-size:12px;font-weight:900}
+    .choice:nth-child(2) .tag{background:var(--lav)}
+
+    #captureArea{background:var(--card)}
+    .result-header{text-align:center}.result-kicker{margin-bottom:10px;color:#81718e;font-size:13px;font-weight:850}
+    .result-title{margin:0 auto 13px;font-size:clamp(25px,7vw,30px);line-height:1.3;font-weight:950;letter-spacing:-.04em}
+    .type-pill{display:inline-block;margin-bottom:18px;padding:8px 15px;border-radius:999px;background:linear-gradient(135deg,#a38ac6,#886fb2);color:#fff;font-size:13px;font-weight:900}
+    .gauge-box{margin-bottom:16px;padding:12px 14px;border:1px solid var(--line);border-radius:18px;background:#fffdfa}
+    .gauge-line{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,1fr);align-items:center;gap:9px;padding:9px 0}
+    .gauge-line+.gauge-line{border-top:1px dashed #eee4df}
+    .axis-name{color:#796890;font-size:12px;font-weight:900}.side{display:flex;align-items:center;gap:7px;min-width:0}.side-label{font-size:13px;font-weight:850;white-space:nowrap}.dots{display:flex;gap:4px}
+    .dot{width:13px;height:13px;border:1.5px solid #c9c1be;border-radius:50%;background:#fff}
+    .dot.on.data{border-color:var(--rose);background:var(--rose)}.dot.on.flow{border-color:var(--lav);background:var(--lav)}
+    .dot.on.attack{border-color:var(--gold);background:var(--gold)}.dot.on.defense{border-color:#d48188;background:#d48188}
+    .dot.on.hold,.dot.on.move{border-color:var(--sage);background:var(--sage)}
+    .summary{margin:0 0 13px;padding:18px 15px;border:1px solid #f0dfdc;border-radius:18px;background:linear-gradient(135deg,#fff4f2,#fffaf8);text-align:center;font-size:17px;line-height:1.65;font-weight:900}
+    .info-card{display:grid;grid-template-columns:44px 70px minmax(0,1fr);align-items:center;gap:10px;margin-top:10px;padding:14px 12px;border:1px solid #eae1dd;border-radius:17px;background:#fff}
+    .ico{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;font-size:20px}.ico.feature{background:var(--rose-soft)}.ico.strength{background:var(--sage-soft)}.ico.caution{background:var(--lav-soft)}
+    .info-label{font-size:14px;font-weight:900}.info-label.feature{color:#c95e72}.info-label.strength{color:#667f58}.info-label.caution{color:#7d65aa}.info-text{color:#393438;font-size:13px;line-height:1.6}
+    .result-actions{margin-top:21px}.share-title{margin:0 0 11px;text-align:center;font-size:16px;font-weight:900}.share-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .share-btn{min-height:49px;padding:13px 10px;border-radius:15px;background:#fff;font-size:14px;font-weight:900}.copy-btn{border:1.5px solid #9b81c5;color:#6f50a4}.save-btn{border:1.5px solid #dc7c8c;color:#c95166}
+    .restart{width:100%;min-height:46px;margin-top:10px;padding:12px;border-radius:14px;background:#f1ede8;color:#625b60;font-size:13px;font-weight:850}
+    .toast{position:fixed;z-index:100;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;max-width:calc(100% - 32px);padding:10px 15px;transform:translateX(-50%);transition:opacity .2s;border-radius:999px;background:#2f2b2f;color:#fff;font-size:13px;font-weight:800;white-space:nowrap;opacity:0;pointer-events:none}.toast.show{opacity:1}
+    .saving .result-actions{display:none}.saving{padding-bottom:26px}.saving .credit{margin-top:18px}
+    @media(max-width:390px){.panel{padding:23px 16px}.question{min-height:88px;font-size:19px}.gauge-box{padding:10px}.gauge-line{grid-template-columns:64px minmax(0,1fr) minmax(0,1fr);gap:5px}.side{gap:4px}.side-label{font-size:12px}.dot{width:12px;height:12px}.info-card{grid-template-columns:42px 62px minmax(0,1fr);gap:7px;padding:12px 9px}.summary{font-size:16px}}
+    @media(max-width:330px){.wrap{padding-inline:8px}.panel{padding-inline:12px}.gauge-line{grid-template-columns:1fr 1fr;gap:7px}.axis-name{grid-column:1/-1}.info-card{grid-template-columns:38px 1fr}.ico{width:36px;height:36px}.info-text{grid-column:1/-1;padding:0 4px 2px}.share-row{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section id="startScreen" class="screen" aria-labelledby="mainTitle">
+      <div class="panel">
+        <div class="brand">🔑 KEY OF RICH</div>
+        <h1 id="mainTitle">키오리 투자캐릭터 TEST</h1>
+        <div class="subtitle">나는 어떤 투자스타일일까? ✨</div>
+        <p class="desc">9개의 질문으로 가볍게 알아보세요.</p>
+        <button id="startBtn" class="primary" type="button">테스트 시작하기</button>
+        <div class="notice">※ 여러분의 즐거움을 위하여 부족한 실력으로 만들었습니다. 재미로 보는 성향 테스트이며 실제 투자 적합성이나 투자 성과와는 관련이 없습니다.</div>
+        <div class="credit">Created by RS_HJ &amp; GPT</div>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="screen hidden" aria-live="polite" aria-labelledby="questionText">
+      <div class="panel">
+        <div class="progress-row"><div id="progressLabel" class="progress-label">1 / 9</div><div class="quiz-brand">✨ 키오리 TEST</div></div>
+        <div class="progress-track" role="progressbar" aria-label="테스트 진행률" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1"><div id="progressBar" class="progress-bar"></div></div>
+        <div id="questionText" class="question"></div>
+        <div id="choices" class="choices"></div>
+        <div class="credit">Created by RS_HJ &amp; GPT</div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen hidden" aria-labelledby="resultTitle">
+      <div class="panel" id="captureArea">
+        <div class="result-header"><div class="result-kicker">✨ 나의 투자캐릭터는</div><div id="resultTitle" class="result-title"></div><div id="resultType" class="type-pill"></div></div>
+        <div id="gaugeBox" class="gauge-box" aria-label="응답 성향 게이지"></div>
+        <div id="summary" class="summary"></div>
+        <div class="info-card"><div class="ico feature" aria-hidden="true">📊</div><div class="info-label feature">특징</div><div id="feature" class="info-text"></div></div>
+        <div class="info-card"><div class="ico strength" aria-hidden="true">🏆</div><div class="info-label strength">강점</div><div id="strength" class="info-text"></div></div>
+        <div class="info-card"><div class="ico caution" aria-hidden="true">⚠️</div><div class="info-label caution">주의할 점</div><div id="caution" class="info-text"></div></div>
+        <div class="result-actions"><div class="share-title">내 투자캐릭터 공유하기 💕</div><div class="share-row"><button id="copyBtn" class="share-btn copy-btn" type="button">🔗 링크 복사</button><button id="saveBtn" class="share-btn save-btn" type="button">⇩ 이미지 저장</button></div><button id="restartBtn" class="restart" type="button">다시 하기</button></div>
+        <div class="credit">Created by RS_HJ &amp; GPT</div>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const questions = [
+      {q:'누가 “이거 요즘 진짜 좋대!”라고 한다. 나는?',a:[{text:'“왜 좋은데? 요즘 어떤 흐름 때문에 뜨는 거야?”',score:'FLOW'},{text:'“실적은 어때? 실제로 얼마나 벌고 있어?”',score:'DATA'}]},
+      {q:'둘 중 더 배 아픈 상황은?',a:[{text:'무서워서 안 샀는데 그 뒤로 계속 오른 것 😭',score:'ATTACK'},{text:'샀는데 그 뒤로 계속 떨어진 것 😱',score:'DEFENSE'}]},
+      {q:'보유 중인 지수가 갑자기 크게 출렁인다.\n하지만 내가 투자한 이유 자체가 바뀐 건 없다. 나는?',a:[{text:'일단 일부 정리하고, 시장이 진정되면 다시 들어갈 타이밍을 본다.',score:'MOVE'},{text:'계획이 그대로라면 일단 둔다. 계좌도 굳이 자주 안 본다. 🙈',score:'HOLD'}]},
+      {q:'내 예상과 반대로 시장이 움직이고 있다. 나는?',a:[{text:'내가 놓친 수치·자료·정보가 있는지 다시 찾아본다.',score:'DATA'},{text:'시장 분위기와 흐름이 왜 달라졌는지 살펴본다.',score:'FLOW'}]},
+      {q:'목표수익률에 도달했다. 나는?',a:[{text:'더 오를 것 같으니 조금 더 기다려보거나 매도 시점을 다시 정한다.',score:'MOVE'},{text:'목표수익 달성했으니 판다.',score:'HOLD'}]},
+      {q:'내가 “이 가격이면 사야지” 생각했던 가격까지 떨어졌다.\n그런데 시장 분위기는 여전히 안 좋다.',a:[{text:'가격은 왔지만 뭔가 불안하다. 조금 더 본다.',score:'DEFENSE'},{text:'원래 기다리던 가격이다. 산다.',score:'ATTACK'}]},
+      {q:'친구가 “그래서 넌 왜 이거 샀어?”라고 물었다.',a:[{text:'“실적이랑 수치 봤는데 괜찮더라고. 자료 보여줄게.” 📊',score:'DATA'},{text:'“앞으로 이쪽 시장이 더 커질 것 같아. 흐름이 이쪽이잖아.” 🌊',score:'FLOW'}]},
+      {q:'QQQ가 연일 떨어지고 뉴스에는 비관적인 전망이 가득하다.',a:[{text:'“어… 슬슬 매수 버튼이 근질거리는데?” 🛒',score:'ATTACK'},{text:'“아직 아니다. 조금 더 지켜보자.” 🛡️',score:'DEFENSE'}]},
+      {q:'며칠 사이 시장 분위기가 확 달라졌다.',a:[{text:'환경이 달라졌다면 전략도 그에 맞게 조정한다.',score:'MOVE'},{text:'단기적인 변화 때문에 원래 전략을 자주 바꾸진 않는다.',score:'HOLD'}]}
+    ];
+
+    const results = {
+      'DATA-ATTACK-HOLD':{title:'감으로 투자하라고? 데이터부터 가져와',type:'데이터 · 공격 · 홀드형',summary:'근거가 확인되면 과감하게 들어가고, 한번 판단하면 쉽게 흔들리지 않는다.',feature:'자료와 수치를 충분히 확인한 뒤 투자하고, 한번 결정하면 계획대로 오래 가져가는 편이다.',strength:'감정에 휘둘리기보다 근거와 원칙을 지킨다.',caution:'확신이 강해지면 상황 변화에도 기존 판단을 오래 끌 수 있다.'},
+      'FLOW-ATTACK-HOLD':{title:'근거는 있는데 설명하려면 좀 길다, 일단 내 촉을 믿어',type:'촉/흐름 · 공격 · 홀드형',summary:'현재의 숫자보다 앞으로 산업과 시장이 어디로 갈지를 보고 먼저 기회를 잡는 편.',feature:'지금 당장 돈을 많이 못 벌어도 “앞으로 이 시장은 커질 텐데?”라는 큰 흐름을 보고 투자한다.',strength:'변화의 방향을 빨리 읽고 선제적으로 움직일 수 있다.',caution:'미래 가능성을 너무 믿으면 현재의 불리한 신호를 가볍게 볼 수 있다.'},
+      'DATA-DEFENSE-HOLD':{title:'돌다리도 두들기다가 결국 돌다리를 부순다',type:'데이터 · 방어 · 홀드형',summary:'충분히 확인하고 납득되어야 움직이는 신중한 투자자.',feature:'자료와 수치를 여러 번 확인하고 확신이 생긴 뒤에야 투자하는 편이다.',strength:'충동적인 판단이 적고 원칙을 잘 지킨다.',caution:'확인하다가 좋은 기회가 먼저 지나갈 수 있다.'},
+      'FLOW-DEFENSE-HOLD':{title:'급할 거 있나, 때 되면 오르겠지',type:'촉/흐름 · 방어 · 홀드형',summary:'분위기를 충분히 살피고 들어간 뒤에는 조급하게 흔들리지 않는 편.',feature:'시장의 분위기와 흐름을 보면서 신중하게 진입하고, 한번 투자하면 오래 기다리는 편이다.',strength:'시장 소음에 휘둘리지 않고 기다리는 힘이 있다.',caution:'대응이 필요한 순간에도 지나치게 기다릴 수 있다.'},
+      'DATA-ATTACK-MOVE':{title:'분석은 길게 했지만 결정은 3초',type:'데이터 · 공격 · 대응형',summary:'들어가기 전에는 꼼꼼하지만, 근거가 확인되면 실행과 수정은 빠르다.',feature:'자료와 수치를 충분히 확인한 뒤 기회라고 판단되면 빠르게 실행하고, 상황이 바뀌면 전략도 빠르게 수정한다.',strength:'분석력과 실행력을 같이 가져가는 편이다.',caution:'새 정보가 나올 때마다 판단을 바꾸면 매매가 잦아질 수 있다.'},
+      'FLOW-ATTACK-MOVE':{title:'남들은 파도 타면 멀미한다는데 나는 괜찮다',type:'촉/흐름 · 공격 · 대응형',summary:'시장 흐름을 빠르게 읽고, 기회가 보이면 타고 분위기가 바뀌면 바로 움직인다.',feature:'시장의 변화와 분위기에 민감하며, 흐름이 좋다고 판단하면 빠르게 올라타는 편이다.',strength:'변화에 빠르고 기회 포착력이 좋다.',caution:'흐름을 잘못 읽으면 추격과 빠른 손절을 반복할 수 있다.'},
+      'DATA-DEFENSE-MOVE':{title:'이 숫자 뭐지? 일단 매수 버튼에서 손 뗀다',type:'데이터 · 방어 · 대응형',summary:'숫자로 위험 신호를 확인하고, 이상하면 빠르게 대응하는 타입.',feature:'수치가 예상과 다르거나 이상한 신호가 보이면 그냥 넘기지 않고 다시 확인한 뒤 전략을 조정한다.',strength:'위험 신호를 비교적 빨리 발견한다.',caution:'작은 변화에도 너무 민감하게 반응할 수 있다.'},
+      'FLOW-DEFENSE-MOVE':{title:'쎄하면 이유 찾기 전에 일단 튄다',type:'촉/흐름 · 방어 · 대응형',summary:'분위기 변화에 민감하고 위험하다고 느끼면 미련 없이 움직인다.',feature:'시장 분위기가 이상하다고 느끼면 오래 버티기보다 먼저 줄이거나 빠져나오는 편이다.',strength:'위기 상황에서 결정을 미루지 않는다.',caution:'단순한 불안까지 위험 신호로 받아들일 수 있다.'}
+    };
+
+    const initialScores=()=>({DATA:0,FLOW:0,ATTACK:0,DEFENSE:0,HOLD:0,MOVE:0});
+    let index=0, scores=initialScores(), answering=false, toastTimer;
+    const $=id=>document.getElementById(id);
+    const startScreen=$('startScreen'),quizScreen=$('quizScreen'),resultScreen=$('resultScreen');
+
+    $('startBtn').addEventListener('click',()=>{startScreen.classList.add('hidden');quizScreen.classList.remove('hidden');renderQuestion();window.scrollTo(0,0)});
+    $('restartBtn').addEventListener('click',resetQuiz);$('copyBtn').addEventListener('click',copyLink);$('saveBtn').addEventListener('click',saveImage);
+
+    function renderQuestion(){
+      answering=false;const item=questions[index];$('progressLabel').textContent=`${index+1} / ${questions.length}`;$('progressBar').style.width=`${((index+1)/questions.length)*100}%`;
+      const progress=document.querySelector('.progress-track');progress.setAttribute('aria-valuenow',String(index+1));$('questionText').textContent=item.q;$('choices').replaceChildren();
+      item.a.forEach((choice,i)=>{const button=document.createElement('button');button.type='button';button.className='choice';const tag=document.createElement('span');tag.className='tag';tag.textContent=i===0?'A':'B';const label=document.createElement('span');label.textContent=choice.text;button.append(tag,label);button.addEventListener('click',()=>selectAnswer(choice.score));$('choices').appendChild(button)});
+    }
+    function selectAnswer(key){if(answering)return;answering=true;$('choices').querySelectorAll('button').forEach(button=>button.disabled=true);scores[key]++;index++;if(index===questions.length)showResult();else renderQuestion()}
+    function dots(count,cssClass){const fragment=document.createDocumentFragment();for(let i=0;i<3;i++){const dot=document.createElement('span');dot.className=`dot${i<count?` on ${cssClass}`:''}`;dot.setAttribute('aria-hidden','true');fragment.appendChild(dot)}return fragment}
+    function showResult(){
+      quizScreen.classList.add('hidden');resultScreen.classList.remove('hidden');const key=`${scores.DATA>scores.FLOW?'DATA':'FLOW'}-${scores.ATTACK>scores.DEFENSE?'ATTACK':'DEFENSE'}-${scores.HOLD>scores.MOVE?'HOLD':'MOVE'}`;const result=results[key];
+      $('resultTitle').textContent=result.title;$('resultType').textContent=result.type;$('summary').textContent=result.summary;$('feature').textContent=result.feature;$('strength').textContent=result.strength;$('caution').textContent=result.caution;
+      const axes=[['판단방식','DATA','FLOW','데이터','촉/흐름','data','flow'],['위험대응','ATTACK','DEFENSE','공격','방어','attack','defense'],['행동방식','HOLD','MOVE','홀드','대응','hold','move']];$('gaugeBox').replaceChildren();
+      axes.forEach(axis=>{const row=document.createElement('div');row.className='gauge-line';const name=document.createElement('div');name.className='axis-name';name.textContent=axis[0];row.appendChild(name);[[axis[1],axis[3],axis[5]],[axis[2],axis[4],axis[6]]].forEach(sideData=>{const side=document.createElement('div');side.className='side';side.setAttribute('aria-label',`${sideData[1]} ${scores[sideData[0]]}개`);const label=document.createElement('span');label.className='side-label';label.textContent=sideData[1];const dotWrap=document.createElement('span');dotWrap.className='dots';dotWrap.appendChild(dots(scores[sideData[0]],sideData[2]));side.append(label,dotWrap);row.appendChild(side)});$('gaugeBox').appendChild(row)});window.scrollTo(0,0)
+    }
+    function resetQuiz(){index=0;scores=initialScores();answering=false;resultScreen.classList.add('hidden');quizScreen.classList.add('hidden');startScreen.classList.remove('hidden');$('gaugeBox').replaceChildren();window.scrollTo(0,0)}
+    function showToast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),1700)}
+    async function copyLink(){
+      const url=window.location.href;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url)}else{const input=document.createElement('textarea');input.value=url;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();const copied=document.execCommand('copy');input.remove();if(!copied)throw new Error('copy failed')}showToast('링크를 복사했어요 🔗')}catch(error){showToast('주소창의 링크를 복사해주세요')}
+    }
+    async function saveImage(){
+      const area=$('captureArea'),button=$('saveBtn');if(typeof window.html2canvas!=='function'){showToast('이미지 저장 기능을 불러오지 못했어요');return}button.disabled=true;area.classList.add('saving');
+      try{await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const canvas=await window.html2canvas(area,{scale:Math.min(window.devicePixelRatio||2,2),backgroundColor:'#fffdfb',useCORS:true,logging:false,scrollX:0,scrollY:-window.scrollY});const dataUrl=canvas.toDataURL('image/png');const link=document.createElement('a');link.download='키오리_투자캐릭터_결과.png';link.href=dataUrl;document.body.appendChild(link);link.click();link.remove();showToast('이미지를 저장했어요 💕')}catch(error){showToast('저장에 실패했어요. 화면 캡처를 이용해주세요')}finally{area.classList.remove('saving');button.disabled=false}
+    }
+  </script>
+</body>
+</html>
